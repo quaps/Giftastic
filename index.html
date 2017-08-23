@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vu7Sun9 -- a vapor gif search</title>
+  <link href="https://fonts.googleapis.com/css?family=Audiowide|Iceland|VT323" rel="stylesheet">
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+  <style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Vu7Sun9</h1>
+    <form id="img-form">
+      <label for="img-input">mk bttns</label>
+      <input type="text" id="img-input">
+      <input id="add-something" type="submit" value="ENTER">
+    </form>
+    <hr>
+    <div id="buttons-view"></div>      
+    <div class="images"></div>
+
+    <style type="text/css">
+    
+      h1 {
+        font-family: 'VT323', monospace;
+        font-family: 'Iceland', cursive;
+        font-size: 56px;
+        color: #00efdb;
+        text-align: center;
+        animation-name: title;
+        animation-duration: 23s;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes title {
+        0% {color: #00efdb;}
+        37% {color: #2200ff;}
+        89% {color: #00efdb;}
+      }
+
+      label {
+        font-family: 'VT323', monospace;
+        color: #00efdb;
+        position: relative;
+        margin: 0 auto;
+        margin-right: 15px;  
+      }
+
+      body {
+        background-color: #FFE6F7;
+        animation-name: example;
+        animation-duration: 29s;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes example {
+        0% {background-color: #FFE6F7;}
+        27% {background-color: #e7bcff;}
+        53% {background-color: #ffceb2;}
+        79% {background-color: #FFE6F7;}
+      }
+
+      .imgButton {
+          font-family: 'VT323', monospace;
+          background-color: #E6FFFD;
+          color: #00efdb;
+          font-size: 24px;
+      }
+
+      #buttons-view {
+        margin: auto;
+      }
+
+      .item {
+        display: inline-block;
+      }
+
+      #img-form {
+        position: relative;
+        width: 75%;
+        position: relative; 
+      }
+
+      #img-input {
+        position: relative;
+        margin: 0 auto;  
+      }
+
+      #add-something {
+        position: relative;
+        margin: 0 auto;  
+        font-family: 'VT323', monospace;
+        background-color: #E6FFFD;
+        color: #00efdb;
+        font-size: 14px;
+      }
+    
+    </style>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    var theGifs = ["vaporwave", "gantz graf", "glitch", "vektroid", "garden of delete"];
+
+    function imagerie() {
+        var name = $(this).attr("data-name");
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=28dbe788a8084c32b11278682be15511";
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          }).done(function(response) {          
+            console.log(response);
+            var results = response.data;
+            for (var i = 0; i < results.length; i++) {
+              var gifDiv = $("<div class='item'>");
+              var image = $("<img>");
+              image.attr("src", results[i].images.fixed_height_still.url);
+              gifDiv.prepend(image);
+            $(".images").prepend(gifDiv);
+            }
+          });      
+    };
+
+    function renderButtons() {
+        $("#buttons-view").empty();
+        for (var i = 0; i < theGifs.length; i++) {
+          var a = $("<button>");
+          a.addClass("imgButton");
+          a.attr("data-name", theGifs[i]);
+          a.text(theGifs[i]);
+          $("#buttons-view").append(a);
+        }
+    }
+
+    $("#add-something").on("click", function(event) {
+        event.preventDefault();
+        var imgInput = $("#img-input").val().trim();
+        theGifs.push(imgInput);
+        renderButtons();
+    });
+
+    var display = function () {
+        $("#buttons-view").append(theGifs);
+    }
+
+    $(".imgButton").on("click", function(event) {
+    });
+
+    $(document).on("click", ".imgButton", imagerie);
+    
+    renderButtons();
+
+    </script>
+  </div>
+</body>
+
+</html>
